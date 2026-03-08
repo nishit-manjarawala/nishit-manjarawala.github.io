@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Nishit Manjarawala | Tactical Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --cyan-primary: #22d3ee;
+            --slate-bg: #020617;
+            --slate-card: #0f172a;
+            --target-red: #ff4d4d;
+        }
+
+        @media (pointer: fine) {
+            * {
+                cursor: none !important;
+            }
+
+            #custom-cursor {
+                display: block;
+                width: 12px;
+                height: 24px;
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                transform: translate(-50%, -10%);
+                background: var(--cyan-primary);
+                clip-path: polygon(50% 0%, 100% 100%, 50% 80%, 0% 100%);
+                box-shadow: 0 0 10px var(--cyan-primary);
+                transition: transform 0.1s ease-out, width 0.2s, height 0.2s, background 0.2s;
+            }
+
+            #custom-cursor.hovering {
+                width: 45px;
+                height: 45px;
+                background: transparent;
+                border: 2px solid var(--target-red);
+                border-radius: 50%;
+                clip-path: none;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 0 20px var(--target-red);
+                animation: pulseTarget 1s infinite alternate;
+            }
+
+            #custom-cursor.hovering::after,
+            #custom-cursor.hovering::before {
+                content: '';
+                position: absolute;
+                background: white;
+                display: block;
+            }
+
+            #custom-cursor.hovering::before {
+                width: 100%;
+                height: 1px;
+                top: 50%;
+                left: 0;
+            }
+
+            #custom-cursor.hovering::after {
+                width: 1px;
+                height: 100%;
+                left: 50%;
+                top: 0;
+            }
+        }
+
+        @keyframes pulseTarget {
+            from {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        @media (pointer: coarse) {
+            #custom-cursor {
+                display: none !important;
+            }
+
+            * {
+                cursor: auto !important;
+            }
+        }
+
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            font-family: 'Space Mono', monospace;
+            background-color: var(--slate-bg);
+            color: var(--cyan-primary);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--cyan-primary);
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(400px);
+            }
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--cyan-primary);
+            box-shadow: 0 0 15px var(--cyan-primary);
+            animation: scan 3s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes muzzle-flash {
+            0% {
+                background-color: rgba(34, 211, 238, 0.6);
+            }
+
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        .animate-flash {
+            animation: muzzle-flash 0.2s ease-out forwards;
+        }
+
+        @keyframes tactical-shake {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(-4px, 4px);
+            }
+
+            50% {
+                transform: translate(4px, -4px);
+            }
+        }
+
+        .animate-shake {
+            animation: tactical-shake 0.15s ease-in-out 2;
+        }
+
+        .navbar-gaming {
+            background-color: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        /* SCROLL SPY ACTIVE STATE */
+        .navbar-gaming .nav-link.active {
+            color: var(--cyan-primary) !important;
+            text-shadow: 0 0 10px var(--cyan-primary);
+            border-bottom: 2px solid var(--cyan-primary);
+        }
+
+        .glitch-hover:hover {
+            text-shadow: 2px 0 #ff0000, -2px 0 #00ff00;
+            color: #fff !important;
+        }
+
+        .character-portrait-box {
+            border: 2px solid rgba(34, 211, 238, 0.4);
+            background-color: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+        }
+
+        .terminal-box {
+            border: 1px solid rgba(34, 211, 238, 0.5);
+            background-color: rgba(2, 6, 23, 0.8);
+        }
+
+        .mission-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+            color: #64748b;
+            transition: all 0.3s;
+            text-align: left;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .mission-btn.active {
+            background-color: var(--cyan-primary) !important;
+            color: var(--slate-bg) !important;
+            box-shadow: 0 0 25px var(--cyan-primary);
+            border-left: 10px solid #fff;
+            font-weight: bold;
+        }
+
+        /* Dropdown Styling */
+        #mission-select-mobile {
+            border: 1px solid var(--cyan-primary);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2322d3ee' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        }
+
+        .tactical-grid-bg {
+            background-image: linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            background-color: rgba(2, 6, 23, 0.6);
+        }
+
+        .project-node {
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--cyan-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.9);
+            margin: 0 auto;
+        }
+
+        .project-node:hover {
+            background: var(--cyan-primary);
+            color: var(--slate-bg);
+            box-shadow: 0 0 20px var(--cyan-primary);
+            transform: scale(1.1);
+        }
+
+        #mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background-color: var(--slate-bg);
+            display: none;
+            opacity: 0;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease;
+        }
+
+        #mobile-menu-overlay.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
+        .menu-link-anim {
+            opacity: 0;
+            transform: translateY(20px);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 15px 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #mobile-menu-overlay.active .menu-link-anim {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #modal-box {
+            max-height: 100%;
+            overflow: scroll;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="custom-cursor"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <audio id="sfx-voice" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
+        preload="auto"></audio>
+    <audio id="sfx-fire" src="freesound_community-ak-47-89833.mp3" preload="auto"></audio>
+
+    <nav id="header-nav" class="navbar navbar-gaming fixed-top p-3">
+        <div class="container-xl d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <div class="border border-2 border-info px-2 py-1 fw-bold">N</div>
+                <div>
+                    <p class="text-xsmall text-uppercase text-secondary m-0 lh-1" style="font-size: 0.65rem;">Player_ID
+                    </p>
+                    <p class="small fw-bold text-uppercase m-0 tracking-widest">Nishit_Manjarawala</p>
+                </div>
+            </div>
+            <div id="desktop-nav" class="d-none d-md-flex gap-4">
+                <a href="#hero"
+                    class="nav-link nav-item-scroll glitch-hover text-secondary small fw-bold text-uppercase active">Character</a>
+                <a href="#mission-terminal"
+                    class="nav-link nav-item-scroll glitch-hover text-secondary small fw-bold text-uppercase">Missions</a>
+                <a href="#level-1"
+                    class="nav-link nav-item-scroll glitch-hover text-secondary small fw-bold text-uppercase">Level
+                    I</a>
+                <a href="#contact"
+                    class="nav-link nav-item-scroll glitch-hover text-secondary small fw-bold text-uppercase">Contact</a>
+            </div>
+            <button onclick="toggleMobileMenu()" class="btn d-md-none text-info p-0 shadow-none"><i
+                    class="fas fa-bars fs-3"></i></button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu-overlay">
+        <button onclick="toggleMobileMenu()"
+            class="btn position-absolute top-0 end-0 p-4 text-info fs-1 shadow-none">X</button>
+        <a href="#hero" onclick="handleMenuClick(event, '#hero')" class="menu-link-anim text-info"
+            style="transition-delay: 0.1s;">[ 01: CHARACTER ]</a>
+        <a href="#mission-terminal" onclick="handleMenuClick(event, '#mission-terminal')"
+            class="menu-link-anim text-white" style="transition-delay: 0.2s;">[ 02: MISSIONS ]</a>
+        <a href="#level-1" onclick="handleMenuClick(event, '#level-1')" class="menu-link-anim text-white"
+            style="transition-delay: 0.3s;">[ 03: LEVEL I ]</a>
+        <a href="#contact" onclick="handleMenuClick(event, '#contact')" class="menu-link-anim text-white"
+            style="transition-delay: 0.4s;">[ 04: CONTACT ]</a>
+    </div>
+
+    <main class="container-xl">
+        <section id="hero" class="row min-vh-100 align-items-center py-5 mt-5">
+            <div class="col-lg-5 mb-5 mb-lg-0">
+                <div class="position-relative character-portrait-box p-1 mx-auto" style="max-width: 380px;">
+                    <div class="scan-line"></div>
+                    <div class="position-absolute top-0 start-0 p-3 z-3">
+                        <p class="small text-info text-uppercase m-0">Class</p>
+                        <p class="small fw-bold bg-dark px-2 text-uppercase m-0">Project Manager</p>
+                    </div>
+                    <img src="banner.png" alt="Nishit" class="img-fluid opacity-75" style="mix-blend-mode: lighten;">
+                </div>
+            </div>
+            <div class="col-lg-7 ps-lg-5">
+                <h2 class="display-3 fw-black text-white text-uppercase tracking-tighter mb-3">Nishit <span
+                        class="text-info font-italic">MANJARAWALA</span></h2>
+                <p class="border-start border-info border-4 ps-4 text-secondary mb-5 fs-5 bg-dark bg-opacity-50 p-3">
+                    "Project Lead & Fractional CTO specializing in scalable SaaS ecosystems, cross-functional team
+                    management, and technical roadmap execution."
+                </p>
+                <div class="row g-3">
+                    <div class="col-sm-6"><a href="https://www.linkedin.com/in/nishit-manjarawala/" target="_blank"
+                            class="btn btn-info w-100 rounded-0 fw-black py-3 text-uppercase tracking-widest shadow-none">LinkedIn
+                            Profile</a></div>
+                    <div class="col-sm-6"><a href="#mission-terminal"
+                            onclick="handleMenuClick(event, '#mission-terminal')"
+                            class="btn btn-outline-info w-100 rounded-0 fw-black py-3 text-uppercase tracking-widest shadow-none">Mission
+                            Log</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mission-terminal" class="py-5">
+            <div class="d-flex align-items-center gap-3 mb-5">
+                <div class="flex-grow-1 border-bottom border-secondary opacity-50"></div>
+                <h3 class="h4 fw-bold text-uppercase text-info font-italic m-0">Campaign History</h3>
+                <div class="flex-grow-1 border-bottom border-secondary opacity-50"></div>
+            </div>
+
+            <div id="terminal-box" class="row g-0 terminal-box shadow-lg">
+                <div class="col-lg-4 border-end border-secondary">
+                    <div
+                        class="p-3 bg-dark border-bottom border-secondary small fw-bold text-uppercase tracking-widest text-secondary d-flex justify-content-between align-items-center">
+                        <span>Select Data File</span>
+                        <i class="fas fa-microchip text-info d-md-none"></i>
+                    </div>
+                    <div class="p-3 d-md-none bg-dark bg-opacity-50">
+                        <select id="mission-select-mobile"
+                            class="form-select bg-dark text-info border-info rounded-0 small fw-bold text-uppercase shadow-none"
+                            onchange="showMission(this.value, null)">
+                        </select>
+                    </div>
+                    <div id="mission-list" class="d-none d-md-block overflow-auto custom-scrollbar"
+                        style="max-height: 500px;"></div>
+                </div>
+                <div id="display-area" class="col-lg-8 p-4 p-md-5 position-relative bg-dark bg-opacity-25"
+                    style="min-height: 500px;">
+                    <div id="flash-overlay" class="position-absolute inset-0 pointer-events-none z-3"></div>
+                    <div id="mission-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="level-1" class="py-5 mb-5">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="flex-grow-1 border-bottom border-secondary opacity-50"></div>
+                <h3 class="h2 fw-bold text-uppercase text-info font-italic m-0">LEVEL I: COMPLETED MISSIONS</h3>
+                <div class="flex-grow-1 border-bottom border-secondary opacity-50"></div>
+            </div>
+
+            <div class="text-center mb-5">
+                <div class="d-inline-block px-4 py-2 border border-danger bg-danger bg-opacity-10">
+                    <p class="text-xsmall fw-black text-danger text-uppercase m-0 tracking-widest">
+                        <i class="fas fa-user-shield me-2"></i> SECURITY CLEARANCE REQUIRED: NDA RESTRICTED CONTENT
+                    </p>
+                </div>
+                <p class="text-secondary small mt-2 opacity-75">Displaying 9 tactical highlights. 40+ classified
+                    projects remaining in archive.</p>
+            </div>
+
+            <div class="tactical-grid-bg p-4 p-md-5 position-relative overflow-hidden">
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 g-md-5 justify-content-center position-relative z-1"
+                    id="project-map"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="project-modal"
+        class="fixed-top vh-100 vw-100 bg-dark bg-opacity-90 d-none justify-content-center align-items-center p-3"
+        style="z-index: 3000; backdrop-filter: blur(5px);">
+        <div id="modal-box" class="bg-dark border border-2 border-info p-4 p-md-5 position-relative w-100"
+            style="max-width: 650px;">
+            <button onclick="closeProject()"
+                class="btn btn-link text-info position-absolute top-0 end-0 p-3 text-decoration-none fw-black shadow-none">CLOSE
+                [X]</button>
+            <div id="modal-content" class="mt-4">
+                <div class="d-flex align-items-center gap-4 border-bottom border-secondary pb-4 mb-4">
+                    <div id="p-icon" class="display-4 text-info"></div>
+                    <div>
+                        <h4 id="p-title" class="h3 fw-black text-white text-uppercase m-0"></h4>
+                        <p class="text-xsmall text-danger fw-bold text-uppercase m-0">MISSION STATUS: CLASSIFIED</p>
+                    </div>
+                </div>
+                <p id="p-desc" class="small text-secondary text-uppercase lh-lg"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact" class="bg-dark bg-opacity-75 border-top border-secondary py-5">
+        <div class="container-xl">
+            <div class="row align-items-center g-4 text-center">
+                <div class="col-md-3 text-md-start small">
+                    <p class="text-secondary fw-bold text-uppercase m-0">System v2026.03.07</p>
+                </div>
+                <div class="col-md-9">
+                    <div class="row g-3 g-md-0 align-items-center">
+                        <div class="col-md-3"><a href="mailto:manjarawalanishit@gmail.com"
+                                class="text-info text-decoration-none small">manjarawalanishit@gmail.com</a></div>
+                        <div class="col-md-3 border-md-start border-secondary"><a href="tel:7405126362"
+                                class="text-info text-decoration-none small">+91 74051 26362</a></div>
+                        <div class="col-md-3 border-md-start border-secondary"><a href="https://wa.me/917405126362"
+                                target="_blank" class="text-info text-decoration-none small">WhatsApp</a></div>
+                        <div class="col-md-3 border-md-start border-secondary"><a
+                                href="https://www.linkedin.com/in/nishit-manjarawala/" target="_blank"
+                                class="text-info text-decoration-none small">LinkedIn</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        if (!window.matchMedia("(pointer: coarse)").matches) {
+            window.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+            document.addEventListener('mouseover', e => { if (e.target.closest('a, button, .project-node, .mission-btn')) cursor.classList.add('hovering'); });
+            document.addEventListener('mouseout', e => { if (e.target.closest('a, button, .project-node, .mission-btn')) cursor.classList.remove('hovering'); });
+        }
+
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let bullets = [];
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Bullet {
+            constructor() { this.reset(); }
+            reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.length = 25 + Math.random() * 50; this.speed = 15 + Math.random() * 25; this.opacity = 0.1 + Math.random() * 0.5; }
+            draw() { ctx.beginPath(); ctx.strokeStyle = `rgba(34, 211, 238, ${this.opacity})`; ctx.lineWidth = 1; ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.length, this.y - (this.length / 2)); ctx.stroke(); this.x += this.speed; this.y -= this.speed / 2; if (this.x > canvas.width || this.y < 0) { this.x = -this.length; this.y = Math.random() * canvas.height + 200; } }
+        }
+        for (let i = 0; i < 60; i++) bullets.push(new Bullet());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); bullets.forEach(b => b.draw()); requestAnimationFrame(animate); }
+        window.addEventListener('resize', initCanvas); initCanvas(); animate();
+
+        // SCROLL SPY LOGIC
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section, footer');
+            const navLinks = document.querySelectorAll('.nav-link');
+            let current = "";
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function smoothScrollTo(elementId) {
+            const element = document.querySelector(elementId);
+            if (!element) return;
+            const header = document.getElementById('header-nav');
+            const offset = header.offsetHeight + 50;
+            window.scrollTo({ top: element.getBoundingClientRect().top + window.pageYOffset - offset, behavior: "smooth" });
+        }
+
+        function handleMenuClick(event, targetId) { event.preventDefault(); const menu = document.getElementById('mobile-menu-overlay'); if (menu.classList.contains('active')) toggleMobileMenu(); setTimeout(() => smoothScrollTo(targetId), 400); }
+        function toggleMobileMenu() { document.getElementById('mobile-menu-overlay').classList.toggle('active'); }
+
+        const missions = {
+            weisetech: {
+                title: "WEISETECH DEVELOPERS",
+                role: "Project Manager",
+                status: "Active",
+                years: "Aug 2025 - Present",
+                objectives: [
+                    "Leading client communication, requirement analysis, and product roadmap planning.",
+                    "Managing sprint planning, backlog prioritization, and Agile delivery cycles.",
+                    "Overseeing development of scalable full-stack applications using modern architectures.",
+                    "Coordinating cross-functional teams including backend, frontend, mobile, and UI/UX.",
+                    "Designing system architecture for SaaS, eCommerce, and enterprise platforms.",
+                    "Handling project estimation, risk management, and delivery timelines.",
+                    "Implementing CI/CD workflows from development to staging and production.",
+                    "Ensuring code quality, security standards, and scalable infrastructure planning."
+                ],
+                tech: ["Laravel", "Vue.js", "Inertia.js", "WordPress", "MERN", "Jenkins"]
+            },
+
+            sapphire: {
+                title: "SAPPHIRE SOFTWARE SOLUTIONS",
+                role: "Team Leader",
+                status: "Complete",
+                years: "Jun 2023 - Aug 2025",
+                objectives: [
+                    "Led full-stack application development using Laravel and Vue.js.",
+                    "Managed backend engineering team and coordinated with mobile and UI teams.",
+                    "Handled sprint planning, backlog management, and stakeholder communication.",
+                    "Designed scalable APIs and backend architectures for enterprise applications.",
+                    "Deployed secure cloud infrastructure on AWS using Docker and Kubernetes.",
+                    "Implemented CI/CD pipelines and automated deployment workflows.",
+                    "Optimized application performance, scalability, and system security.",
+                    "Mentored developers and enforced coding standards and best practices."
+                ],
+                tech: ["Laravel", "Vue.js", "Inertia.js", "AWS", "Docker", "Kubernetes", "MERN"]
+            },
+
+            pugmarker: {
+                title: "PUGMARKER SOLUTIONS PVT. LTD.",
+                role: "Chief Technology Officer",
+                status: "Complete",
+                years: "May 2019 - May 2023",
+                objectives: [
+                    "Led overall technology strategy and system architecture for SaaS and eCommerce products.",
+                    "Designed scalable multi-tenant SaaS platforms and enterprise backend systems.",
+                    "Built secure integrations with payment gateways, CRMs, and third-party APIs.",
+                    "Oversaw product development lifecycle from concept to production deployment.",
+                    "Managed engineering teams, recruitment, mentoring, and performance reviews.",
+                    "Established development standards, DevOps pipelines, and architecture guidelines.",
+                    "Collaborated with business teams to translate requirements into technical solutions.",
+                    "Ensured platform scalability, security, and long-term technology roadmap."
+                ],
+                tech: ["SaaS", "FinTech", "CRM", "Laravel", "Vue.js"]
+            },
+
+            cmsminds: {
+                title: "cmsMinds",
+                role: "Senior WordPress Developer / Team Lead",
+                status: "Complete",
+                years: "Nov 2018 - May 2019",
+                objectives: [
+                    "Led WordPress development team delivering solutions for North American clients.",
+                    "Architected custom WordPress plugins, themes, and API-driven platforms.",
+                    "Designed Laravel + Vue.js systems integrated with WordPress ecosystems.",
+                    "Implemented DevOps pipelines using Jenkins, Docker, and Kubernetes.",
+                    "Optimized performance and scalability for high-traffic websites.",
+                    "Managed client communication, technical planning, and delivery coordination."
+                ],
+                tech: ["WordPress", "Laravel", "Vue.js", "Jenkins", "Docker"]
+            },
+
+            natrix: {
+                title: "NatRIX Software Pvt. Ltd.",
+                role: "Senior PHP Developer",
+                status: "Complete",
+                years: "Nov 2017 - Nov 2018",
+                objectives: [
+                    "Introduced Laravel framework practices and modern PHP architecture.",
+                    "Established WordPress and Laravel development workflows for the team.",
+                    "Built and mentored backend development team from the ground up.",
+                    "Delivered multiple enterprise Laravel and WordPress applications.",
+                    "Performed code reviews and enforced coding standards.",
+                    "Guided junior developers through mentoring and architecture discussions."
+                ],
+                tech: ["PHP", "Laravel", "WordPress"]
+            },
+
+            hunani: {
+                title: "Hunani Infotech",
+                role: "PHP Developer",
+                status: "Complete",
+                years: "Jul 2016 - Nov 2017",
+                objectives: [
+                    "Developed student management systems and institutional web portals.",
+                    "Built backend systems using Core PHP, WordPress, and CodeIgniter.",
+                    "Customized WordPress themes and plugins for client requirements.",
+                    "Worked on database design and backend module development.",
+                    "Improved performance and maintainability of legacy systems."
+                ],
+                tech: ["Core PHP", "WordPress", "CodeIgniter"]
+            },
+
+            narola: {
+                title: "Narola Infotech",
+                role: "PHP Developer",
+                status: "Complete",
+                years: "Jan 2016 - Jul 2016",
+                objectives: [
+                    "Developed backend modules for custom PHP web applications.",
+                    "Worked with CodeIgniter framework for MVC-based development.",
+                    "Built reusable components and improved modular code structure.",
+                    "Collaborated with frontend teams for feature integration."
+                ],
+                tech: ["PHP", "CodeIgniter"]
+            }
+        };
+
+        const projects = [
+            {
+                title: "Crypto Hub", icon: "fa-bitcoin-sign", desc: `
+                <ul>
+                    <li>Designed CI/CD and automation workflows managing the full lifecycle from development to staging and production deployments.</li>
+                    <li>Development and management of high-scale blogging systems for crypto and gaming niches</li>
+                    <li>Affiliate marketing platforms including tracking, reporting, and conversion optimization</li>
+                    <li>Casino and slot gaming integrations with content and promotional platforms</li>
+                    <li>High-performance CMS architectures for large content publishing</li>
+                    <li>SEO, analytics, and monetization systems for affiliate-driven websites</li>
+                </ul>
+            ` },
+            {
+                title: "Skill Quiz", icon: "fa-trophy", desc: `
+                <ul>
+                    <li>Developed a scalable quiz platform with real-time participation, scoring algorithms, and dynamic leaderboards.</li>
+                    <li>Implemented AI automation to generate and maintain a continuously updated question bank.</li>
+                    <li>Integrated Video KYC verification for secure user onboarding and fraud prevention.</li>
+                    <li>Designed contest and prize distribution logic inspired by fantasy gaming platforms, supporting competitive quiz tournaments.</li>
+                    <li>Built secure payment, wallet, and bonus reward systems with automated payout mechanisms.</li>
+                    <li>Created automated workflows managing the complete quiz lifecycle from contest creation to result declaration.</li>
+                    <li>Implemented strong security layers to safeguard the platform against hacking attempts, bot attacks, and exploitation.</li>
+                </ul>
+            ` },
+            {
+                title: "CA SaaS", icon: "fa-user-tie", desc: `
+                <ul>
+                    <li>Developed a SaaS-based task management platform for Chartered Accountants (CA) and Company Secretaries (CS) to streamline compliance operations.</li>
+                    <li>Designed a multi-tenant SaaS architecture enabling multiple firms to manage clients, companies, and compliance tasks within isolated environments.</li>
+                    <li>Automated recurring regulatory workflows including GST filings, ROC filings, income tax returns, and statutory compliance deadlines.</li>
+                    <li>Implemented intelligent task scheduling with automated reminders, due date tracking, and compliance alerts.</li>
+                    <li>Built a centralized client management system to handle multiple companies, documents, and compliance records.</li>
+                    <li>Developed secure document management with file uploads, version control, and controlled client sharing.</li>
+                    <li>Created role-based access control supporting partners, managers, staff members, and clients.</li>
+                    <li>Implemented workflow automation for task assignment, approval chains, and completion tracking.</li>
+                    <li>Built real-time dashboards for compliance monitoring, task progress, and team workload distribution.</li>
+                    <li>Integrated automated notifications via email and messaging systems for reminders and updates.</li>
+                    <li>Implemented strong security architecture including authentication layers, activity logs, and protection for sensitive financial data.</li>
+                </ul>
+            ` },
+            {
+                title: "Cable OLX", icon: "fa-plug", desc: `
+                <ul>
+                    <li>Developed a SaaS-based marketplace platform for trading industrial cable remainders and surplus materials.</li>
+                    <li>Designed multi-tenant architecture enabling multiple vendors and businesses to list and manage cable inventory.</li>
+                    <li>Built product listing and catalog management systems supporting specifications such as cable type, length, material, and condition.</li>
+                    <li>Implemented advanced search and filtering to help buyers quickly find suitable cable remainders based on technical parameters.</li>
+                    <li>Developed vendor dashboards for managing listings, inquiries, inventory updates, and order tracking.</li>
+                    <li>Integrated secure communication tools enabling direct buyer–seller negotiations and inquiries.</li>
+                    <li>Implemented quotation and offer management workflows for bulk industrial purchases.</li>
+                    <li>Built inventory tracking systems allowing vendors to manage leftover cable stock efficiently.</li>
+                    <li>Designed automated notifications and alerts for inquiries, offers, and inventory updates.</li>
+                    <li>Implemented role-based access control for platform administrators, vendors, and buyers.</li>
+                    <li>Applied strong security measures to protect business data and ensure safe marketplace transactions.</li>
+                </ul>
+            ` },
+            {
+                title: "Bio Link+", icon: "fa-sitemap", desc: `
+                <ul>
+                    <li>Developed a SaaS-based bio link management platform enabling users to create customizable multi-link landing pages.</li>
+                    <li>Built dynamic link management allowing users to organize social links, websites, and promotional content in a single profile page.</li>
+                    <li>Integrated product inquiry forms enabling visitors to submit product-related queries directly from bio links.</li>
+                    <li>Designed customizable page layouts with branding options including themes, colors, logos, and backgrounds.</li>
+                    <li>Implemented analytics dashboards to track link clicks, visitor behavior, and engagement metrics.</li>
+                    <li>Built lead capture systems to collect and manage customer inquiries and contact information.</li>
+                    <li>Developed automated notifications for new inquiries and lead submissions.</li>
+                    <li>Created secure user dashboards for managing links, forms, and page customization.</li>
+                    <li>Implemented role-based access and account management features for teams and business users.</li>
+                    <li>Applied security and spam protection mechanisms to safeguard forms and user data.</li>
+                </ul>
+            ` },
+            {
+                title: "Bistro CRM", icon: "fa-utensils", desc: `
+                <ul>
+                    <li>Developed a digital restaurant platform for menu management, online ordering, and customer engagement.</li>
+                    <li>Built dynamic digital menus allowing restaurants to easily update items, prices, and availability.</li>
+                    <li>Implemented online ordering systems supporting dine-in, takeaway, and delivery workflows.</li>
+                    <li>Integrated secure payment systems enabling seamless order processing and transaction handling.</li>
+                    <li>Designed customer loyalty programs with reward points, discounts, and repeat purchase incentives.</li>
+                    <li>Developed restaurant dashboards for managing menus, orders, promotions, and customer interactions.</li>
+                    <li>Implemented order tracking and status updates for improved customer experience.</li>
+                    <li>Built analytics dashboards to monitor sales performance, popular menu items, and customer behavior.</li>
+                    <li>Integrated notification systems for order confirmations, promotions, and loyalty rewards.</li>
+                    <li>Applied security measures to protect payment transactions and customer data.</li>
+                </ul>
+            ` },
+            {
+                title: "Lead Forge", icon: "fa-funnel-dollar", desc: `
+                <ul>
+                    <li>Architected a SaaS-based omnichannel CRM platform integrating communication channels including WhatsApp, Facebook, and LinkedIn.</li>
+                    <li>Designed scalable multi-tenant SaaS architecture allowing multiple businesses and teams to manage customer conversations securely.</li>
+                    <li>Developed a unified messaging inbox enabling teams to handle multi-platform conversations in a centralized interface.</li>
+                    <li>Implemented automated lead capture and customer interaction tracking across social media channels.</li>
+                    <li>Built workflow automation for message routing, lead assignment, and follow-up management.</li>
+                    <li>Integrated chatbot and AI-assisted auto-response systems to manage high-volume customer inquiries.</li>
+                    <li>Developed customer profile management with conversation history, engagement insights, and lead tracking.</li>
+                    <li>Created team collaboration tools including conversation assignment, tagging, and internal notes.</li>
+                    <li>Implemented analytics dashboards to monitor response times, lead conversions, and engagement performance.</li>
+                    <li>Integrated notification systems to alert teams about new messages and pending responses.</li>
+                    <li>Applied strong security layers, authentication mechanisms, and role-based access control to protect customer communication data.</li>
+                </ul>
+            ` },
+            {
+                title: "Merchant Core", icon: "fa-truck-fast", desc: `
+                <ul>
+                    <li>Architected a SaaS-based ecommerce platform enabling merchants to manage products, orders, and delivery operations.</li>
+                    <li>Designed scalable multi-tenant architecture allowing multiple businesses to operate independent ecommerce stores on a single platform.</li>
+                    <li>Implemented automated order processing workflows from order placement to fulfillment.</li>
+                    <li>Integrated third-party delivery and logistics services for automated shipment creation and tracking.</li>
+                    <li>Developed centralized dashboards for managing orders, inventory, deliveries, and customer interactions.</li>
+                    <li>Built product catalog and inventory management systems supporting dynamic pricing and stock control.</li>
+                    <li>Integrated secure payment gateways and automated transaction processing.</li>
+                    <li>Implemented real-time order status updates and customer notifications for improved user experience.</li>
+                    <li>Developed analytics dashboards to track sales performance, order volumes, and operational efficiency.</li>
+                    <li>Applied strong security practices including authentication, role-based access control, and transaction protection.</li>
+                </ul>
+            ` },
+            {
+                title: "Map Nav", icon: "fa-map-location-dot", desc: `
+                <ul>
+                    <li>Developed a navigation platform using open map technologies with custom pathing and route calculation.</li>
+                    <li>Integrated open map services with customized map layers for displaying domain-specific geographic data.</li>
+                    <li>Designed geofencing systems to trigger location-based actions and alerts within defined map boundaries.</li>
+                    <li>Built route navigation and pathfinding logic for optimized movement between mapped locations.</li>
+                    <li>Implemented interactive map features including markers, polygons, and real-time location interactions.</li>
+                    <li>Developed tools for managing custom map layers, geographic zones, and route data.</li>
+                    <li>Integrated APIs for location services, map rendering, and spatial data management.</li>
+                    <li>Built dashboards for visualizing geographic data, routes, and operational areas.</li>
+                    <li>Optimized map performance for handling large geographic datasets and multiple overlays.</li>
+                    <li>Implemented security and access control for managing location data and map interactions.</li>
+                </ul>
+            ` }
+        ];
+
+        const sfxFire = document.getElementById('sfx-fire');
+
+        function init() {
+            const list = document.getElementById('mission-list');
+            const mobileSelect = document.getElementById('mission-select-mobile');
+
+            // Desktop buttons
+            list.innerHTML = Object.keys(missions).map(key => `<button onclick="showMission('${key}', this)" class="mission-btn p-4 fw-bold text-uppercase small">${missions[key].title}</button>`).join('');
+
+            // Mobile options
+            mobileSelect.innerHTML = Object.keys(missions).map(key => `<option value="${key}">${missions[key].title}</option>`).join('');
+
+            const map = document.getElementById('project-map');
+            map.innerHTML = projects.map((p, idx) => `<div class="col text-center"><div class="project-node" onclick="deployProject(${idx})"><i class="fas ${p.icon} fs-4"></i></div><p class="text-xsmall fw-black text-uppercase tracking-widest text-info mt-3" style="font-size:0.65rem;">${p.title}</p></div>`).join('');
+
+            showMission('weisetech', list.querySelector('.mission-btn'), true);
+        }
+
+        function showMission(key, btn, isInitialLoad = false) {
+            const m = missions[key];
+            const content = document.getElementById('mission-content');
+            const mobileSelect = document.getElementById('mission-select-mobile');
+
+            if (!isInitialLoad) {
+                sfxFire.pause(); sfxFire.currentTime = 0; sfxFire.play().catch(e => { });
+                document.getElementById('terminal-box').classList.add('animate-shake'); setTimeout(() => document.getElementById('terminal-box').classList.remove('animate-shake'), 300);
+                if (window.innerWidth < 992) smoothScrollTo('#display-area');
+            }
+
+            content.classList.add('animate-glitch'); setTimeout(() => content.classList.remove('animate-glitch'), 300);
+
+            content.innerHTML = `<div class="d-flex justify-content-between border-bottom border-info border-opacity-50 pb-4 mb-4">
+                <div>
+                    <h4 class="h2 fw-black text-white text-uppercase m-0">${m.title}</h4>
+                    <p class="text-info fw-bold small m-0">${m.role}</p>
+                </div>
+                <div class="text-end">
+                    <p class="text-success fw-bold small m-0">${m.status}</p>
+                    <p class="text-secondary text-xsmall m-0">${m.years}</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-7">
+                    <ul class="list-unstyled small text-secondary">${m.objectives.map(obj => `<li class="mb-2 d-flex gap-2"><span class="text-info fw-bold">»</span> ${obj}</li>`).join('')}</ul>
+                </div>
+                <div class="col-md-5">
+                    <div class="d-flex flex-wrap gap-2">${m.tech.map(t => `<span class="badge border border-info text-info rounded-0 text-xsmall fw-bold py-2 px-3">${t}</span>`).join('')}</div>
+                </div>
+            </div>`;
+
+            // Sync Desktop buttons
+            document.querySelectorAll('.mission-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            // Sync Mobile Select
+            mobileSelect.value = key;
+        }
+
+        function deployProject(idx) {
+            const p = projects[idx];
+            const modal = document.getElementById('project-modal');
+            sfxFire.pause(); sfxFire.currentTime = 0; sfxFire.play().catch(e => { });
+            modal.classList.remove('d-none'); modal.classList.add('d-flex');
+            document.getElementById('p-title').innerText = p.title; document.getElementById('p-desc').innerHTML = p.desc; document.getElementById('p-icon').innerHTML = `<i class="fas ${p.icon}"></i>`;
+        }
+
+        function closeProject() { document.getElementById('project-modal').classList.add('d-none'); document.getElementById('project-modal').classList.remove('d-flex'); }
+        init();
+    </script>
+</body>
+
+</html>
